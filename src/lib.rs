@@ -42,6 +42,7 @@ macro_rules! int_impl {
             pub fn apply(&self, board: $T) -> $T {
                 let mut b: $T = 0;
                 for m in &self.moves {
+                    b <<= 1;
                     let alive = (board & m).count_ones();
                     if alive == 3 || alive == 4 {
                         b |= 1;
