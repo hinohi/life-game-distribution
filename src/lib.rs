@@ -38,6 +38,40 @@ impl Universe {
         Universe { n: self.n, cell }
     }
 
+    pub fn lives(&self) -> usize {
+        let mut ret = 0;
+        for c in self.cell.iter() {
+            ret += *c as usize;
+        }
+        ret
+    }
+
+    pub fn next_generation_lives(&self) -> usize {
+        let mut lives = 0;
+        for y in 0..self.n {
+            for x in 0..self.n {
+                let x0 = (x + self.n - 1) % self.n;
+                let x1 = (x + 1) % self.n;
+                let y0 = (y + self.n - 1) % self.n;
+                let y1 = (y + 1) % self.n;
+                let count = self.cell[y0 * self.n + x0]
+                    + self.cell[y0 * self.n + x]
+                    + self.cell[y0 * self.n + x1]
+                    + self.cell[y * self.n + x0]
+                    + self.cell[y * self.n + x1]
+                    + self.cell[y1 * self.n + x0]
+                    + self.cell[y1 * self.n + x]
+                    + self.cell[y1 * self.n + x1];
+                match (self.cell[y * self.n + x], count) {
+                    (0, 3) => lives += 1,
+                    (1, 2) | (1, 3) => lives += 1,
+                    _ => (),
+                }
+            }
+        }
+        lives
+    }
+
     pub fn next_permutation(&mut self) -> bool {
         for i in 0..self.n * self.n {
             if self.cell[i] == 0 {
@@ -177,6 +211,18 @@ mod tests {
         "#
             )
         );
+    }
+
+    #[test]
+    fn lives() {
+        let mut u = Universe::new(4);
+        loop {
+            let n = u.next_generation();
+            assert_eq!(n.lives(), u.next_generation_lives());
+            if !u.next_permutation() {
+                break;
+            }
+        }
     }
 
     #[test]
