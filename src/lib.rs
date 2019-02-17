@@ -1,3 +1,6 @@
+use rand::Rng;
+
+#[derive(Debug, Clone)]
 pub struct Universe {
     n: usize,
     cell: Vec<u8>,
@@ -202,6 +205,13 @@ impl Universe {
             }
         }
         false
+    }
+
+    pub fn one_cell_flip<R: Rng>(&self, r: &mut R) -> Universe {
+        let i = r.gen_range(0, self.n * self.n);
+        let mut u = self.clone();
+        u.cell[i] = 1 - u.cell[i];
+        u
     }
 }
 
