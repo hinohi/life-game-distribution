@@ -52,7 +52,7 @@ impl WangLandau {
         let mut u = Universe::new(self.n);
         let mut energy = self.calc_energy(&u);
         self.hist = vec![0; self.n * self.n * 2 + 1];
-        loop {
+        for _ in 0..10000 {
             for _ in 0..self.n * self.n * 10 {
                 let nex = u.one_cell_flip(r);
                 let nex_energy = self.calc_energy(&nex);

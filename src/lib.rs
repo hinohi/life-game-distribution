@@ -1,6 +1,6 @@
 use rand::Rng;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Hash, Eq, PartialEq)]
 pub struct Universe {
     n: usize,
     cell: Vec<u8>,
@@ -12,6 +12,13 @@ impl Universe {
         Universe {
             n,
             cell: vec![0; n * n],
+        }
+    }
+
+    pub fn from_rng<R: Rng>(n: usize, r: &mut R) -> Universe {
+        Universe {
+            n,
+            cell: (0..n * n).map(|_| r.gen_range(0, 2)).collect::<Vec<_>>(),
         }
     }
 
