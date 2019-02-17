@@ -14,12 +14,71 @@ impl Universe {
 
     pub fn next_generation(&self) -> Universe {
         let mut cell = Vec::with_capacity(self.n * self.n);
-        for y in 0..self.n {
-            for x in 0..self.n {
-                let x0 = (x + self.n - 1) % self.n;
-                let x1 = (x + 1) % self.n;
-                let y0 = (y + self.n - 1) % self.n;
-                let y1 = (y + 1) % self.n;
+        // x=0 y=0
+        let count = self.cell[(self.n - 1) * self.n + self.n - 1]
+            + self.cell[(self.n - 1) * self.n + 0]
+            + self.cell[(self.n - 1) * self.n + 1]
+            + self.cell[0 + self.n - 1]
+            + self.cell[0 + 1]
+            + self.cell[self.n + self.n - 1]
+            + self.cell[self.n + 0]
+            + self.cell[self.n + 1];
+        cell.push(match (self.cell[0], count) {
+            (0, 3) => 1,
+            (1, 2) | (1, 3) => 1,
+            _ => 0,
+        });
+        // y=0
+        for x in 1..self.n - 1 {
+            let x0 = x - 1;
+            let x1 = x + 1;
+            let count = self.cell[(self.n - 1) * self.n + x0]
+                + self.cell[(self.n - 1) * self.n + x]
+                + self.cell[(self.n - 1) * self.n + x1]
+                + self.cell[x0]
+                + self.cell[x1]
+                + self.cell[self.n + x0]
+                + self.cell[self.n + x]
+                + self.cell[self.n + x1];
+            cell.push(match (self.cell[x], count) {
+                (0, 3) => 1,
+                (1, 2) | (1, 3) => 1,
+                _ => 0,
+            });
+        }
+        // x=n-1 y=0
+        let count = self.cell[(self.n - 1) * self.n + self.n - 2]
+            + self.cell[(self.n - 1) * self.n + self.n - 1]
+            + self.cell[(self.n - 1) * self.n]
+            + self.cell[0 + self.n - 2]
+            + self.cell[0 + 0]
+            + self.cell[self.n + self.n - 2]
+            + self.cell[self.n + self.n - 1]
+            + self.cell[self.n + 0];
+        cell.push(match (self.cell[self.n - 1], count) {
+            (0, 3) => 1,
+            (1, 2) | (1, 3) => 1,
+            _ => 0,
+        });
+        for y in 1..self.n - 1 {
+            let count = self.cell[(y - 1) * self.n + self.n - 1]
+                + self.cell[(y - 1) * self.n + 0]
+                + self.cell[(y - 1) * self.n + 1]
+                + self.cell[y * self.n + self.n - 1]
+                + self.cell[y * self.n + 1]
+                + self.cell[(y + 1) * self.n + self.n - 1]
+                + self.cell[(y + 1) * self.n + 0]
+                + self.cell[(y + 1) * self.n + 1];
+            cell.push(match (self.cell[y * self.n], count) {
+                (0, 3) => 1,
+                (1, 2) | (1, 3) => 1,
+                _ => 0,
+            });
+            for x in 1..self.n - 1 {
+                let x0 = x - 1;
+                let x1 = x + 1;
+                let y0 = y - 1;
+                let y1 = y + 1;
                 let count = self.cell[y0 * self.n + x0]
                     + self.cell[y0 * self.n + x]
                     + self.cell[y0 * self.n + x1]
@@ -34,7 +93,68 @@ impl Universe {
                     _ => 0,
                 });
             }
+            let count = self.cell[(y - 1) * self.n + self.n - 2]
+                + self.cell[(y - 1) * self.n + self.n - 1]
+                + self.cell[(y - 1) * self.n]
+                + self.cell[y * self.n + self.n - 2]
+                + self.cell[y * self.n + 0]
+                + self.cell[(y + 1) * self.n + self.n - 2]
+                + self.cell[(y + 1) * self.n + self.n - 1]
+                + self.cell[(y + 1) * self.n + 0];
+            cell.push(match (self.cell[y * self.n + self.n - 1], count) {
+                (0, 3) => 1,
+                (1, 2) | (1, 3) => 1,
+                _ => 0,
+            });
         }
+        // x=0 y=n-1
+        let count = self.cell[(self.n - 2) * self.n + self.n - 1]
+            + self.cell[(self.n - 2) * self.n + 0]
+            + self.cell[(self.n - 2) * self.n + 1]
+            + self.cell[(self.n - 1) * self.n + self.n - 1]
+            + self.cell[(self.n - 1) * self.n + 1]
+            + self.cell[self.n - 1]
+            + self.cell[0]
+            + self.cell[1];
+        cell.push(match (self.cell[(self.n - 1) * self.n], count) {
+            (0, 3) => 1,
+            (1, 2) | (1, 3) => 1,
+            _ => 0,
+        });
+        // y=n-1
+        for x in 1..self.n - 1 {
+            let x0 = x - 1;
+            let x1 = x + 1;
+            let count = self.cell[(self.n - 2) * self.n + x0]
+                + self.cell[(self.n - 2) * self.n + x]
+                + self.cell[(self.n - 2) * self.n + x1]
+                + self.cell[(self.n - 1) * self.n + x0]
+                + self.cell[(self.n - 1) * self.n + x1]
+                + self.cell[x0]
+                + self.cell[x]
+                + self.cell[x1];
+            cell.push(match (self.cell[(self.n - 1) * self.n + x], count) {
+                (0, 3) => 1,
+                (1, 2) | (1, 3) => 1,
+                _ => 0,
+            });
+        }
+        // x=n-1 y=n-1
+        let count = self.cell[(self.n - 2) * self.n + self.n - 2]
+            + self.cell[(self.n - 2) * self.n + self.n - 1]
+            + self.cell[(self.n - 2) * self.n]
+            + self.cell[(self.n - 1) * self.n + self.n - 2]
+            + self.cell[(self.n - 1) * self.n + 0]
+            + self.cell[self.n - 2]
+            + self.cell[self.n - 1]
+            + self.cell[0];
+        cell.push(
+            match (self.cell[(self.n - 1) * self.n + self.n - 1], count) {
+                (0, 3) => 1,
+                (1, 2) | (1, 3) => 1,
+                _ => 0,
+            },
+        );
         Universe { n: self.n, cell }
     }
 
