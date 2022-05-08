@@ -42,6 +42,8 @@ $ ./target/release/back_count 4 10
 
 `next_generation_lives_dist` が全探索、 `next_generation_lives_random_dist` がランダム初期値サンプリング。
 
+### `5*5`
+
 `5*5` で横軸を「G世代後に生き残っているセルの数」、縦軸を「盤面数」として分布を書くと↓のようになる。
 
 ![](./image/next_generation_lives_dist_5.svg)
@@ -71,3 +73,10 @@ $ ./target/release/back_count 4 10
 ```
 
 ライフゲームは普通は周期境界じゃない気がするのでそのせいだろうか？
+
+### `16*16`
+
+10^7 サンプルしている(2h28mかかった)。
+盤面のサイズが大きくなると様相がだいぶ違う。
+
+![](./image/next_generation_lives_random_dist_16.svg)
