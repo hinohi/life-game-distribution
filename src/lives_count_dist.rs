@@ -19,7 +19,7 @@ impl Dist {
     pub fn count_up(&mut self, u: &Universe) {
         *self.gen[0].entry(u.lives()).or_insert(0) += 1;
         let mut uu = u.next_generation();
-        for g in self.gen.iter_mut().skip(1) {
+        for g in self.gen.iter_mut().skip(1).take(self.g - 1) {
             *g.entry(uu.lives()).or_insert(0) += 1;
             uu = uu.next_generation();
         }
