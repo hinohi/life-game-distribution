@@ -11,9 +11,9 @@ fn main() {
     let mut u = Universe::new(n);
     let mut count = HashMap::new();
     loop {
-        let mut uu = u.next_generation();
-        for _ in 1..g {
-            uu = u.next_generation();
+        let mut uu = u.clone();
+        for _ in 0..g {
+            uu = uu.next_generation();
         }
         *count.entry(uu).or_insert(0) += 1;
         if !u.next_permutation() {
