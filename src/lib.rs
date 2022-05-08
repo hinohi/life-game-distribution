@@ -1,3 +1,5 @@
+use std::fmt;
+
 use rand::Rng;
 
 pub mod lives_count_dist;
@@ -89,6 +91,24 @@ impl Universe {
         let mut u = self.clone();
         u.cell[i] = 1 - u.cell[i];
         u
+    }
+}
+
+impl fmt::Display for Universe {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        for y in 0..self.n {
+            let mut line = String::new();
+            for &c in self.cell[self.n * y..self.n * (y + 1)].iter() {
+                if c == 1 {
+                    line.push('#');
+                } else {
+                    line.push('.');
+                }
+            }
+            line.push('\n');
+            f.write_str(&line)?
+        }
+        Ok(())
     }
 }
 
