@@ -1,21 +1,33 @@
-use std::env::args;
+use std::{fs::write, path::PathBuf};
 
+use clap::Parser;
 use rand_pcg::Mcg128Xsl64;
 
 use life_game_distribution::{lives_count_dist::Dist, Universe};
 
-fn main() {
-    let args = args().skip(1).collect::<Vec<_>>();
-    let n = args[0].parse().unwrap();
-    let g = args[1].parse::<usize>().unwrap();
-    let c = args[2].parse::<usize>().unwrap();
+#[derive(Parser)]
+struct Args {
+    #[clap(short)]
+    n: usize,
+    #[clap(short)]
+    g: usize,
+    #[clap(short)]
+    c: usize,
+    #[clap(short)]
+    o: PathBuf,
+}
 
-    let mut dist = Dist::new(g);
+fn main() {
+    let args: Args = Args::parse();
+    let mut dist = Dist::new(args.g);
     let mut random = Mcg128Xsl64::new(1);
-    for _ in 0..c {
-        let u = Universe::from_rng(n, &mut random);
-        dist.count_up(&u);
+    for _ in tqdm::tqdm(0..args.c / 256) {
+        for _ in 0..256 {
+            let u = Universe::from_rng(args.n, &mut random);
+            dist.count_up(&u);
+        }
     }
-    println!("# n={} g={} c={}", n, g, c);
-    dist.dump(n);
+    let mut line = format!("# n={} g={} c={}\n", args.n, args.g, args.c).into_bytes();
+    dist.dump(args.n, &mut line).unwrap();
+    write(args.o, &line).unwrap();
 }

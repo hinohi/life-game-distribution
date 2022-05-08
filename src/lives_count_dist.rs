@@ -1,4 +1,7 @@
-use std::collections::HashMap;
+use std::{
+    collections::HashMap,
+    io::{self, Write},
+};
 
 use crate::Universe;
 
@@ -26,13 +29,15 @@ impl Dist {
         *self.gen[self.g].entry(uu.lives()).or_insert(0) += 1;
     }
 
-    pub fn dump(&self, n: usize) {
+    pub fn dump<W: Write>(&self, n: usize, w: &mut W) -> io::Result<()> {
         for i in 0..=n * n {
             let mut line = format!("{}", i);
             for g in self.gen.iter() {
                 line += &format!(" {}", g.get(&i).or(Some(&0)).unwrap());
             }
-            println!("{}", line);
+            line.push('\n');
+            w.write_all(line.as_bytes())?;
         }
+        Ok(())
     }
 }

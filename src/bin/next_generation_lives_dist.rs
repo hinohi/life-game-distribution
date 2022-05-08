@@ -15,5 +15,7 @@ fn main() {
             break;
         }
     }
-    dist.dump(n);
+    let mut buf = Vec::new();
+    dist.dump(n, &mut buf).unwrap();
+    std::fs::write("a.txt", &buf).unwrap();
 }
