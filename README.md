@@ -80,3 +80,8 @@ $ ./target/release/back_count 4 10
 盤面のサイズが大きくなると様相がだいぶ違う。
 
 ![](./image/next_generation_lives_random_dist_16.svg)
+
+片対数グラフにするとそれぞれがほとんど正規分布であることがわかる。
+`5*5` で見られた生き残りが多い領域の異常なピークはなさそう。
+
+![](./image/next_generation_lives_random_dist_16_log.svg)
