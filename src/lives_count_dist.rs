@@ -27,7 +27,7 @@ impl Dist {
     }
 
     pub fn dump(&self, n: usize) {
-        for i in 0..n * n {
+        for i in 0..=n * n {
             let mut line = format!("{}", i);
             for g in self.gen.iter() {
                 line += &format!(" {}", g.get(&i).or(Some(&0)).unwrap());

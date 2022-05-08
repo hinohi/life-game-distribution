@@ -16,5 +16,6 @@ fn main() {
         let u = Universe::from_rng(n, &mut random);
         dist.count_up(&u);
     }
+    println!("# n={} g={} c={}", n, g, c);
     dist.dump(n);
 }
