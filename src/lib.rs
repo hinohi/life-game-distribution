@@ -1,5 +1,7 @@
 use rand::Rng;
 
+pub mod lives_count_dist;
+
 #[derive(Debug, Clone, Hash, Eq, PartialEq)]
 pub struct Universe {
     n: usize,
@@ -48,6 +50,18 @@ impl Universe {
             }
         }
         Universe { n: self.n, cell }
+    }
+
+    pub fn n_generation(&self, n: usize) -> Universe {
+        if n == 0 {
+            self.clone()
+        } else {
+            let mut u = self.next_generation();
+            for _ in 1..n {
+                u = u.next_generation();
+            }
+            u
+        }
     }
 
     pub fn lives(&self) -> usize {
