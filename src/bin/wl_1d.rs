@@ -4,7 +4,7 @@ use std::u32;
 use rand::Rng;
 use rand_pcg::Mcg128Xsl64;
 
-use back_life_game2::Universe;
+use life_game_distribution::Universe;
 
 struct WangLandau {
     n: usize,
@@ -57,7 +57,7 @@ impl WangLandau {
                 let nex = u.one_cell_flip(r);
                 let nex_energy = self.calc_energy(&nex);
                 let ds = self.s[energy] - self.s[nex_energy];
-                if ds > 0.0 || r.gen_range(0.0, 1.0) < ds.exp() {
+                if ds > 0.0 || r.gen_bool(ds.exp()) {
                     u = nex;
                     energy = nex_energy;
                 }

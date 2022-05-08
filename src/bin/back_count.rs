@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::env::args;
 
-use back_life_game2::Universe;
+use life_game_distribution::Universe;
 
 fn main() {
     let args = args().skip(1).collect::<Vec<_>>();

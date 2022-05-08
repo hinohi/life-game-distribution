@@ -3,7 +3,7 @@ use std::env::args;
 
 use rand_pcg::Mcg128Xsl64;
 
-use back_life_game2::Universe;
+use life_game_distribution::Universe;
 
 fn main() {
     let args = args().skip(1).collect::<Vec<_>>();

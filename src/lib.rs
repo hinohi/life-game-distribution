@@ -18,7 +18,9 @@ impl Universe {
     pub fn from_rng<R: Rng>(n: usize, r: &mut R) -> Universe {
         Universe {
             n,
-            cell: (0..n * n).map(|_| r.gen_range(0, 2)).collect::<Vec<_>>(),
+            cell: (0..n * n)
+                .map(|_| if r.gen_bool(0.5) { 1 } else { 0 })
+                .collect::<Vec<_>>(),
         }
     }
 
@@ -215,7 +217,7 @@ impl Universe {
     }
 
     pub fn one_cell_flip<R: Rng>(&self, r: &mut R) -> Universe {
-        let i = r.gen_range(0, self.n * self.n);
+        let i = r.gen_range(0..self.n * self.n);
         let mut u = self.clone();
         u.cell[i] = 1 - u.cell[i];
         u
